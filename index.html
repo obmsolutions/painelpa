@@ -1,0 +1,57 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PCP | Supermercado P.A.</title><style>
+:root{font-family:system-ui,Arial,sans-serif;color:#192c41;background:#f1f5f9}body{margin:0}header{background:#123452;color:white;padding:15px 20px}h1{font-size:1.2rem;margin:0}header small{color:#c8e0ef}.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px;background:white;border-bottom:1px solid #dce4ed}button,input,select{padding:9px;border:1px solid #cbd5e1;border-radius:7px;background:white}button{cursor:pointer}.tools input{flex:1;min-width:140px}.status{padding:8px 16px;font-size:.84rem;color:#475569}.viewport{height:calc(100dvh - 155px);overflow:auto;background:white;border-top:1px solid #cbd5e1}table{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap}th,td{padding:8px 10px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;max-width:290px;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;background:#dbeafe;color:#173455;z-index:2;text-align:left;min-width:105px}th:first-child,td:first-child{position:sticky;left:0;z-index:3;background:#f1f5f9;min-width:35px}th:first-child{z-index:4}tr:nth-child(even) td:not(:first-child){background:#f8fafc}td{font-variant-numeric:tabular-nums}.error{color:#b91c1c}.filters{display:flex;gap:10px;flex-wrap:wrap;padding:10px 12px;background:#eaf1f8;border-bottom:1px solid #cbd5e1;align-items:start}.filter{position:relative;min-width:200px}.filter summary{cursor:pointer;background:white;padding:10px;border:1px solid #bac9da;border-radius:7px;font-weight:650}.choices{position:absolute;top:100%;left:0;z-index:9;background:white;border:1px solid #bac9da;box-shadow:0 5px 18px #0002;max-height:270px;overflow:auto;min-width:250px;padding:8px;border-radius:7px}.choices label{display:flex;gap:7px;align-items:center;padding:6px;cursor:pointer}.choices input{accent-color:#175c96}.filters button{padding:10px}.all-filters{display:flex;gap:8px;flex-wrap:wrap;width:100%}.option-search{width:100%;box-sizing:border-box;margin-bottom:6px}.hint{font-size:12px;color:#52657c;align-self:center}#scale{transform-origin:top left}
+ .filter-popup{position:fixed;z-index:30;background:#fff;border:1px solid #b6c8dc;box-shadow:0 12px 30px #142b4640;border-radius:9px;padding:12px;width:min(300px,calc(100vw - 32px));max-height:min(430px,70vh);overflow:auto}.filter-popup[hidden]{display:none}.filter-popup label{display:flex;gap:8px;align-items:center;padding:6px 2px;white-space:normal;overflow-wrap:anywhere}.filter-popup input[type=checkbox]{accent-color:#16649c}.filter-popup input[type=search]{width:100%;box-sizing:border-box}.filter-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}.filter-head button{padding:4px 8px}.th-inner{display:flex;align-items:center;justify-content:space-between;gap:8px}.th-filter{padding:4px 7px;border-radius:5px;border:1px solid #9db9d5;background:#fff;color:#173455;font-size:12px}.th-filter.active{background:#155e93;color:white}.filter-actions{display:flex;justify-content:space-between;margin-top:8px;gap:8px}.filter-actions button{font-size:12px;padding:5px}.filter-options{max-height:250px;overflow:auto;margin-top:7px} 
+/* v5: destaque semântico provisório (não representa a formatação original XLSB) */
+td.status-alert{background:#fee2e2!important;color:#991b1b;font-weight:750}td.status-trigger{background:#fef3c7!important;color:#92400e;font-weight:750}td.status-ok{background:#dcfce7!important;color:#166534;font-weight:700}
+.status-note{padding:5px 15px;background:#fff7ed;color:#854d0e;font-size:11px;border-bottom:1px solid #fed7aa}
+@media(max-width:700px){header{padding:9px 12px}h1{font-size:1rem}header small{font-size:10px}.tools{padding:8px;gap:5px}.tools input{flex-basis:100%;min-width:0}.tools button{padding:7px;font-size:12px}.status{padding:6px 9px;font-size:11px}.viewport{height:calc(100dvh - 165px)}th,td{padding:8px 7px;font-size:11px}th{min-width:115px}th:first-child,td:first-child{min-width:34px}.filter-popup{max-height:65vh}}
+td.status-gray{background:#606b76!important;color:white;font-weight:700}
+td.status-red{background:#ef1d24!important;color:white;font-weight:700}
+td.status-green{background:#0ba64a!important;color:white;font-weight:700}
+td.status-yellow{background:#ffca16!important;color:#182536;font-weight:700}
+td.status-blue{background:#092b67!important;color:white;font-weight:700}
+td.status-teal{background:#087ca5!important;color:white;font-weight:700}
+</style></head><body><header><h1>Supermercado P.A. | Painel PCP</h1><small>Versão 9 • Base compartilhada e persistente • Login corporativo</small></header><div class="tools"><input id="search" placeholder="Pesquisar nas 20 colunas..." aria-label="Pesquisar"><button id="clearFilters">Limpar filtros</button><button onclick="zoom(-.1)">− Zoom</button><span id="z">100%</span><button onclick="zoom(.1)">+ Zoom</button></div><div id="filterPopup" class="filter-popup" hidden></div><div class="status-note">Base protegida por autenticação Microsoft 365. Nenhum dado corporativo está incluído neste HTML.</div><section id="authArea" style="padding:10px 15px;background:#fff;display:flex;flex-wrap:wrap;gap:10px;align-items:center"><button id="loginBtn">Entrar com Microsoft 365</button><button id="logoutBtn" hidden>Sair</button><span id="userLabel">Acesso corporativo necessário</span></section><section id="updateArea" style="padding:10px 15px;background:#eaf1f8;display:none;gap:8px;flex-wrap:wrap;align-items:center"><strong>Atualização da base Excel</strong><span id="lastUpdate">Nenhuma base publicada</span><input id="xlsbFile" type="file" accept=".xlsb" aria-label="Selecionar Excel XLSB"><button id="uploadBtn">Validar e publicar Excel</button><span id="uploadResult" role="status"></span></section><div class="status" id="status">Entre com a conta corporativa para carregar os dados.</div><div class="viewport" id="viewport"><div id="scale"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div></div><script>
+let dataset={columns:[],headers:[],rows:[]}, factor=1;const $=id=>document.getElementById(id);const fmt=v=>v==null?'':typeof v==='number'?Number.isInteger(v)?String(v):String(Math.round(v*10000)/10000):String(v);
+function zoom(delta){factor=Math.max(.6,Math.min(1.7,Math.round((factor+delta)*10)/10));$('scale').style.zoom=factor;$('z').textContent=Math.round(factor*100)+'%'}
+let selectedByColumn=[];
+let activeFilter=-1;
+function closeFilter(){const p=$('filterPopup');p.hidden=true;activeFilter=-1}
+function openFilter(i,anchor){
+ const pop=$('filterPopup');
+ if(activeFilter===i&&!pop.hidden){closeFilter();return}
+ activeFilter=i;pop.replaceChildren();pop.hidden=false;
+ const top=document.createElement('div');top.className='filter-head';
+ const title=document.createElement('strong');title.textContent=dataset.columns[i]+' · '+dataset.headers[i];
+ const close=document.createElement('button');close.textContent='✕';close.onclick=closeFilter;top.append(title,close);pop.append(top);
+ const search=document.createElement('input');search.type='search';search.placeholder='Pesquisar valores...';pop.append(search);
+ const options=document.createElement('div');options.className='filter-options';pop.append(options);
+ const values=[...new Set(dataset.rows.map(r=>String(r[i+1]??'').trim()))].sort((a,b)=>a.localeCompare(b,'pt-BR',{numeric:true}));
+ function draw(){options.replaceChildren();for(const val of values.filter(v=>v.toLocaleLowerCase('pt-BR').includes(search.value.toLocaleLowerCase('pt-BR')))){
+ const label=document.createElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=selectedByColumn[i].has(val);
+ check.onchange=()=>{check.checked?selectedByColumn[i].add(val):selectedByColumn[i].delete(val);render()};
+ label.append(check,document.createTextNode(val||'(Vazio)'));options.append(label);
+ }}
+ search.oninput=draw;draw();
+ const actions=document.createElement('div');actions.className='filter-actions';
+ const reset=document.createElement('button');reset.textContent='Limpar esta coluna';reset.onclick=()=>{selectedByColumn[i].clear();render();draw()};
+ const done=document.createElement('button');done.textContent='Concluir';done.onclick=closeFilter;
+ actions.append(reset,done);pop.append(actions);
+ const r=anchor.getBoundingClientRect(),width=Math.min(300,window.innerWidth-32);
+ pop.style.left=Math.max(8,Math.min(r.left,window.innerWidth-width-8))+'px';
+ pop.style.top=Math.max(8,Math.min(r.bottom+5,window.innerHeight-Math.min(pop.offsetHeight,430)-8))+'px';
+}
+document.addEventListener('click',e=>{if(!$('filterPopup').contains(e.target)&&!e.target.closest('.th-filter'))closeFilter()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFilter()});
+function render(){if(!dataset.columns.length)return;const q=$('search').value.trim().toLocaleLowerCase('pt-BR');$('thead').replaceChildren();$('tbody').replaceChildren();const tr=document.createElement('tr');['Linha',...dataset.headers].forEach((h,i)=>{const th=document.createElement('th');if(i){const wrap=document.createElement('div');wrap.className='th-inner';const name=document.createElement('span');name.textContent=`${dataset.columns[i-1]} · ${h}`;const btn=document.createElement('button');btn.className='th-filter'+(selectedByColumn[i-1].size?' active':'');btn.textContent=selectedByColumn[i-1].size?'▾ '+selectedByColumn[i-1].size:'▾';btn.title='Filtrar '+h;btn.setAttribute('aria-label','Filtrar '+h);btn.onclick=()=>openFilter(i-1,btn);wrap.append(name,btn);th.append(wrap)}else th.textContent=h;th.title=h;tr.append(th)});$('thead').append(tr);let count=0;const fragment=document.createDocumentFragment();for(const row of dataset.rows){if(q&&!row.some(v=>fmt(v).toLocaleLowerCase('pt-BR').includes(q)))continue;if(selectedByColumn.some((selected,i)=>selected.size&&!selected.has(String(row[i+1]??'').trim())))continue;const r=document.createElement('tr');row.forEach((v,i)=>{const td=document.createElement('td');td.textContent=fmt(v);td.title=fmt(v);if(i){td.dataset.col=dataset.columns[i-1];if(['FD','FE','FF'].includes(dataset.columns[i-1])){
+ const col=dataset.columns[i-1],status=fmt(v).trim().toLocaleLowerCase('pt-BR');
+ const cls=(col==='FD'?{
+ 'desabastecido':'status-gray','disparado':'status-yellow','ok':'status-green','exc. abastecimento':'status-blue'
+ }:{
+ 'crítico':'status-red','ótimo':'status-green','baixo':'status-yellow','cheio':'status-teal','excesso':'status-blue'
+ })[status];
+ if(cls)td.classList.add(cls);
+ }}r.append(td)});fragment.append(r);count++} $('tbody').append(fragment);$('status').textContent=`${count.toLocaleString('pt-BR')} linhas | Base: ${dataset.updatedAt||'não publicada'} | Arquivo: ${dataset.filename||'não informado'}`}
+$('search').addEventListener('input',render);$('clearFilters').addEventListener('click',()=>{selectedByColumn.forEach(x=>x.clear());$('search').value='';render()});
+
+</script><script src="./config.js"></script><script type="module" src="./app.js"></script></body></html>
